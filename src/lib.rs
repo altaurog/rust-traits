@@ -4,7 +4,7 @@ mod types;
 pub use types::*;
 
 mod eval;
-// mod parse;
+mod parse;
 mod exprt;
 mod integer;
 mod boolean;
