@@ -2,6 +2,15 @@ use std::cmp;
 use crate::types::*;
 
 // exercise 4
+/*
+newtype MinMax = MinMax Integer deriving (Eq, Show)
+
+instance Expr MinMax where
+    lit = MinMax
+    add (MinMax a) (MinMax b) = lit $ max a b
+    mul (MinMax a) (MinMax b) = lit $ min a b
+*/
+
 #[derive(Debug, PartialEq)]
 struct MinMax(i32);
 

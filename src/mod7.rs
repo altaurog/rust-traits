@@ -1,6 +1,14 @@
 use crate::types::*;
 
 // exercise 4
+/*
+newtype Mod7 = Mod7 Integer deriving (Eq, Show)
+
+instance Expr Mod7 where
+    lit = Mod7 . flip mod 7
+    add (Mod7 a) (Mod7 b) = lit $ a + b
+    mul (Mod7 a) (Mod7 b) = lit $ a * b
+*/
 
 #[derive(Debug, PartialEq)]
 struct Mod7(i32);

@@ -1,6 +1,13 @@
 use crate::types::*;
 
 // exercise 4
+/*
+instance Expr Integer where
+    lit = id
+    add = (+)
+    mul = (*)
+*/
+
 impl Expr for i32 {
     fn lit(val: i32) -> i32 { val }
     fn add(&self, other: &i32) -> i32 { *self + *other }

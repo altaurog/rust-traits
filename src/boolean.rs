@@ -1,6 +1,13 @@
 use crate::types::*;
 
 // exercise 4
+/*
+instance Expr Bool where
+    lit = (> 0)
+    add = (||)
+    mul = (&&)
+*/
+
 impl Expr for bool {
     fn lit(val: i32) -> bool { val > 0 }
     fn add(&self, other: &bool) -> bool { (*self) || (*other) }

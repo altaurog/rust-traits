@@ -2,6 +2,13 @@ use crate::types::ExprT;
 use ExprT::*;
 
 // Exercise 1
+/*
+eval :: ET.ExprT -> Integer
+eval (ET.Lit x) = x
+eval (ET.Add x y) = (eval x) + (eval y)
+eval (ET.Mul x y) = (eval x) * (eval y)
+*/
+
 pub fn eval(expr: ExprT) -> i32 {
     match expr {
         Lit(x) => x,

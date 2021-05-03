@@ -2,6 +2,17 @@ use crate::types::*;
 use ExprT::*;
 
 // Exercise 3
+/*
+class Expr a where
+    lit :: Integer -> a
+    add :: a -> a -> a
+    mul :: a -> a -> a
+
+instance Expr ET.ExprT where
+    lit = ET.Lit
+    add = ET.Add
+    mul = ET.Mul
+*/
 impl Expr for ExprT {
     fn lit(val: i32) -> ExprT { Lit(val) }
 
