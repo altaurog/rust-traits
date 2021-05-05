@@ -9,11 +9,11 @@ evalStr str = do
     return $ eval ast
 */
 
-pub fn eval_str(input: &str) -> Option<i32> {
+pub fn eval_str(input: String) -> Option<i32> {
     parse_exp(input).map(eval)
 }
 
-pub fn parse_exp<T: Expr>(input: &str) -> Option<T> {
+pub fn parse_exp<T: Expr>(input: String) -> Option<T> {
     match simple_expr::expr(&input) {
         Ok(exprt) => Some(exprt_to_expr(exprt)),
         Err(_) => None,
@@ -57,14 +57,14 @@ mod ex2_test {
 
     #[test]
     fn test_parse_exp() {
-        let expval: ExprT = parse_exp("2 + 3").unwrap();
+        let expval: ExprT = parse_exp(String::from("2 + 3")).unwrap();
         assert_eq!(expval, ExprT::Add(Box::new(ExprT::Lit(2)), Box::new(ExprT::Lit(3))));
     }
 
     #[test]
     fn test_eval_str() {
-        assert_eq!(eval_str("2 + 3"), Some(5));
-        assert_eq!(eval_str("2 * 3"), Some(6));
-        assert_eq!(eval_str("hello, world!"), None);
+        assert_eq!(eval_str(String::from("2 + 3")), Some(5));
+        assert_eq!(eval_str(String::from("2 * 3")), Some(6));
+        assert_eq!(eval_str(String::from("hello, world!")), None);
     }
 }
