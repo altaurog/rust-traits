@@ -6,9 +6,9 @@ pub enum ExprT {
     Mul(Box<ExprT>, Box<ExprT>),
 }
 
-pub trait Expr {
+pub trait Expr <'a> {
     fn lit(val: i32) -> Self;
-    fn add(&self, other: &Self) -> Self;
-    fn mul(&self, other: &Self) -> Self;
+    fn add<'b: 'a>(&'b self, other: &'b Self) -> Self;
+    fn mul<'b: 'a>(&'b self, other: &'b Self) -> Self;
 }
 

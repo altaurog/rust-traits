@@ -13,16 +13,16 @@ instance Expr ET.ExprT where
     add = ET.Add
     mul = ET.Mul
 */
-impl Expr for ExprT {
-    fn lit(val: i32) -> ExprT { Lit(val) }
+impl <'a> Expr<'a> for ExprT {
+    fn lit(val: i32) -> Self { Lit(val) }
 
-    fn add(&self, other: &ExprT) -> ExprT {
+    fn add<'b: 'a>(&'b self, other: &'b Self) -> Self {
         let my_self = (*self).clone();
         let the_other = (*other).clone();
         Add(Box::new(my_self), Box::new(the_other))
     }
 
-    fn mul(&self, other: &ExprT) -> ExprT {
+    fn mul<'b: 'a>(&'b self, other: &'b Self) -> Self {
         let my_self = (*self).clone();
         let the_other = (*other).clone();
         Mul(Box::new(my_self), Box::new(the_other))

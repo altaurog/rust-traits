@@ -13,25 +13,25 @@ pub fn eval_str(input: String) -> Option<i32> {
     parse_exp(input).map(eval)
 }
 
-pub fn parse_exp<T: Expr>(input: String) -> Option<T> {
+pub fn parse_exp<'a, T: 'a + Expr<'a>>(input: String) -> Option<T> {
     match simple_expr::expr(&input) {
-        Ok(exprt) => Some(exprt_to_expr(exprt)),
+        Ok(exprt) => Some(*exprt_to_expr(&exprt)),
         Err(_) => None,
     }
 }
 
-pub fn exprt_to_expr<T: Expr>(exprt: ExprT) -> T {
-    match exprt {
-        ExprT::Lit(i) => T::lit(i),
+pub fn exprt_to_expr<'a, T: 'a + Expr<'a>>(exprt: &'a ExprT) -> &'a T {
+    match *exprt {
+        ExprT::Lit(i) => &T::lit(i),
         ExprT::Add(box_x, box_y) => {
-            let xt: T = exprt_to_expr(*box_x);
-            let yt: T = exprt_to_expr(*box_y);
-            xt.add(&yt)
+            let xt: &T = exprt_to_expr(&*box_x);
+            let yt: &T = exprt_to_expr(&*box_y);
+            &(xt.add(yt))
         },
         ExprT::Mul(box_x, box_y) => {
-            let xt: T = exprt_to_expr(*box_x);
-            let yt: T = exprt_to_expr(*box_y);
-            xt.mul(&yt)
+            let xt: &T = exprt_to_expr(&*box_x);
+            let yt: &T = exprt_to_expr(&*box_y);
+            &(xt.mul(yt))
         },
     }
 }

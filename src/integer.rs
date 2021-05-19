@@ -8,10 +8,10 @@ instance Expr Integer where
     mul = (*)
 */
 
-impl Expr for i32 {
-    fn lit(val: i32) -> i32 { val }
-    fn add(&self, other: &i32) -> i32 { *self + *other }
-    fn mul(&self, other: &i32) -> i32 { (*self) * (*other) }
+impl <'a> Expr<'a> for i32 {
+    fn lit(val: i32) -> Self { val }
+    fn add<'b: 'a>(&'b self, other: &'b Self) -> Self { *self + *other }
+    fn mul<'b: 'a>(&'b self, other: &'b Self) -> Self { (*self) * (*other) }
 }
 
 #[cfg(test)]

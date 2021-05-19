@@ -13,10 +13,16 @@ instance Expr Mod7 where
 #[derive(Debug, PartialEq)]
 struct Mod7(i32);
 
-impl Expr for Mod7 {
-    fn lit(val: i32) -> Mod7 { Mod7(val % 7) }
-    fn add(&self, other: &Mod7) -> Mod7 { Mod7((self.0 + other.0) % 7) }
-    fn mul(&self, other: &Mod7) -> Mod7 { Mod7((self.0 * other.0) % 7) }
+impl <'a> Expr<'a> for Mod7 {
+    fn lit(val: i32) -> Self { Mod7(val % 7) }
+
+    fn add<'b: 'a>(&'b self, other: &'b Self) -> Self {
+        Mod7((self.0 + other.0) % 7)
+    }
+
+    fn mul<'b: 'a>(&'b self, other: &'b Self) -> Self {
+        Mod7((self.0 * other.0) % 7)
+    }
 }
 
 #[cfg(test)]

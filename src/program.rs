@@ -16,15 +16,19 @@ compile :: String -> Maybe VM.Program
 compile = parseExp lit add mul
 */
 
-impl Expr for Program {
-    fn lit(val: i32) -> Program { VecDeque::from(vec![ PushI(val) ]) }
-    fn add(&self, other: &Program) -> Program {
+impl <'a> Expr<'a> for Program {
+    fn lit(val: i32) -> Self {
+        VecDeque::from(vec![ PushI(val) ])
+    }
+
+    fn add<'b: 'a>(&'b self, other: &'b Self) -> Self {
         let mut new = (*self).clone();
         new.extend((*other).clone().into_iter());
         new.push_back(Add);
         new
     }
-    fn mul(&self, other: &Program) -> Program {
+
+    fn mul<'b: 'a>(&'b self, other: &'b Self) -> Self {
         let mut new = (*self).clone();
         new.extend((*other).clone().into_iter());
         new.push_back(Mul);

@@ -8,10 +8,16 @@ instance Expr Bool where
     mul = (&&)
 */
 
-impl Expr for bool {
-    fn lit(val: i32) -> bool { val > 0 }
-    fn add(&self, other: &bool) -> bool { (*self) || (*other) }
-    fn mul(&self, other: &bool) -> bool { (*self) && (*other) }
+impl <'a> Expr<'a> for bool {
+    fn lit(val: i32) -> Self { val > 0 }
+
+    fn add<'b: 'a>(&'b self, other: &'b Self) -> Self {
+        (*self) || (*other)
+    }
+
+    fn mul<'b: 'a>(&'b self, other: &'b Self) -> Self {
+        (*self) && (*other)
+    }
 }
 
 #[cfg(test)]

@@ -14,10 +14,16 @@ instance Expr MinMax where
 #[derive(Debug, PartialEq)]
 struct MinMax(i32);
 
-impl Expr for MinMax {
-    fn lit(val: i32) -> MinMax { MinMax(val) }
-    fn add(&self, other: &MinMax) -> MinMax { MinMax(cmp::max(self.0, other.0)) }
-    fn mul(&self, other: &MinMax) -> MinMax { MinMax(cmp::min(self.0, other.0)) }
+impl <'a> Expr<'a> for MinMax {
+    fn lit(val: i32) -> Self { MinMax(val) }
+
+    fn add<'b: 'a>(&'b self, other: &'b Self) -> Self {
+        MinMax(cmp::max(self.0, other.0))
+    }
+
+    fn mul<'b: 'a>(&'b self, other: &'b Self) -> Self {
+        MinMax(cmp::min(self.0, other.0))
+    }
 }
 
 #[cfg(test)]
