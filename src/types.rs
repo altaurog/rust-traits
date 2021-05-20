@@ -1,9 +1,10 @@
+use std::rc::Rc;
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum ExprT {
     Lit(i32),
-    Add(Box<ExprT>, Box<ExprT>),
-    Mul(Box<ExprT>, Box<ExprT>),
+    Add(Rc<ExprT>, Rc<ExprT>),
+    Mul(Rc<ExprT>, Rc<ExprT>),
 }
 
 pub trait Expr {

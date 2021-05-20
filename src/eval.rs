@@ -1,3 +1,4 @@
+use std::rc::Rc;
 use crate::types::ExprT;
 use ExprT::*;
 
@@ -9,11 +10,11 @@ eval (ET.Add x y) = (eval x) + (eval y)
 eval (ET.Mul x y) = (eval x) * (eval y)
 */
 
-pub fn eval(expr: ExprT) -> i32 {
-    match expr {
+pub fn eval(expr: Rc<ExprT>) -> i32 {
+    match &*expr {
         Lit(x) => x,
-        Add(x, y) => eval(*x) + eval(*y),
-        Mul(x, y) => eval(*x) * eval(*y),
+        Add(x, y) => eval(x) + eval(y),
+        Mul(x, y) => eval(x) * eval(y),
     }
 }
 
@@ -28,13 +29,13 @@ mod ex1_tests {
 
     #[test]
     fn test_add() {
-        let result = eval(Add(Box::new(Lit(2)), Box::new(Lit(3))));
+        let result = eval(Add(Rc::new(Lit(2)), Rc::new(Lit(3))));
         assert_eq!(result, 5);
     }
 
     #[test]
     fn test_mul() {
-        let result = eval(Mul(Box::new(Lit(2)), Box::new(Lit(3))));
+        let result = eval(Mul(Rc::new(Lit(2)), Rc::new(Lit(3))));
         assert_eq!(result, 6);
     }
 }
