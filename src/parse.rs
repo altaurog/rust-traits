@@ -44,6 +44,7 @@ peg::parser!{
             x:(@) " "* "*" " "* y:@ { ExprT::Mul(Box::new(x), Box::new(y)) }
             --
             n:number() { n }
+            "(" " "* e:expr() " "* ")" { e }
         }
 
         rule number() -> ExprT
@@ -62,9 +63,18 @@ mod ex2_test {
     }
 
     #[test]
+    fn test_parse_parentheses() {
+        let expval: ExprT = parse_exp(String::from("(2)")).unwrap();
+        assert_eq!(expval, ExprT::Lit(2));
+    }
+
+    #[test]
     fn test_eval_str() {
         assert_eq!(eval_str(String::from("2 + 3")), Some(5));
         assert_eq!(eval_str(String::from("2 * 3")), Some(6));
+        assert_eq!(eval_str(String::from("(1 + 2) * 3")), Some(9));
         assert_eq!(eval_str(String::from("hello, world!")), None);
     }
 }
+/*
+            */
