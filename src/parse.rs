@@ -39,16 +39,18 @@ pub fn exprt_to_expr<T: Expr>(exprt: ExprT) -> T {
 peg::parser!{
     grammar simple_expr() for str {
         pub rule expr() -> ExprT = precedence!{
-            x:(@) " "* "+" " "* y:@ { ExprT::Add(Box::new(x), Box::new(y)) }
+            x:(@) _ "+" _ y:@ { ExprT::Add(Box::new(x), Box::new(y)) }
             --
-            x:(@) " "* "*" " "* y:@ { ExprT::Mul(Box::new(x), Box::new(y)) }
+            x:(@) _ "*" _ y:@ { ExprT::Mul(Box::new(x), Box::new(y)) }
             --
             n:number() { n }
-            "(" " "* e:expr() " "* ")" { e }
+            "(" _ e:expr() _ ")" { e }
         }
 
         rule number() -> ExprT
             = n:$(['-' | '+']? ['0'..='9']+) {? n.parse().map(ExprT::Lit).or(Err("i32")) }
+
+        rule _ = quiet!{[' ' | '\n' | '\t']*}
     }
 }
 
@@ -72,6 +74,7 @@ mod ex2_test {
     fn test_eval_str() {
         assert_eq!(eval_str(String::from("2 + 3")), Some(5));
         assert_eq!(eval_str(String::from("2 * 3")), Some(6));
+        assert_eq!(eval_str(String::from("1 + 2 * 3")), Some(7));
         assert_eq!(eval_str(String::from("(1 + 2) * 3")), Some(9));
         assert_eq!(eval_str(String::from("hello, world!")), None);
     }
