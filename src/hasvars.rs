@@ -21,14 +21,16 @@ pub trait HasVars {
 }
 
 #[derive(Debug, PartialEq, Clone)]
-pub enum VarExprT {
+pub enum VarExprEnum {
     Lit(i32),
-    Add(Box<VarExprT>, Box<VarExprT>),
-    Mul(Box<VarExprT>, Box<VarExprT>),
+    Add(VarExprT, VarExprT),
+    Mul(VarExprT, VarExprT),
     Var(String),
 }
 
-use VarExprT::*;
+pub type VarExprT = Rc<VarExprEnum>;
+
+use VarExprEnum::*;
 
 /*
 instance Expr VarExprT where
@@ -40,22 +42,22 @@ instance HasVars VarExprT where
     var = Var
 */
 impl HasVars for VarExprT {
-    fn var(sym: String) -> Self { Var(sym) }
+    fn var(sym: String) -> Self {
+        Rc::new(Var(sym))
+    }
 }
 
 impl Expr for VarExprT {
-    fn lit(val: i32) -> Self { Lit(val) }
-
-    fn add(& self, other: & Self) -> Self {
-        let my_self = (*self).clone();
-        let the_other = (*other).clone();
-        Add(Box::new(my_self), Box::new(the_other))
+    fn lit(val: i32) -> Self {
+        Rc::new(Lit(val))
     }
 
-    fn mul(& self, other: & Self) -> Self {
-        let my_self = (*self).clone();
-        let the_other = (*other).clone();
-        Mul(Box::new(my_self), Box::new(the_other))
+    fn add(&self, other: &Self) -> Self {
+        Rc::new(Add(self.clone(), other.clone()))
+    }
+
+    fn mul(&self, other: &Self) -> Self {
+        Rc::new(Mul(self.clone(), other.clone()))
     }
 }
 
@@ -114,6 +116,17 @@ fn with_vars(vals: Vec<(&str, i32)>, expr: SymbolMapExpr) -> Option<i32>
 #[cfg(test)]
 mod ex6_test {
     use super::*;
+
+    #[test]
+    fn test_varexprt() {
+        let a = VarExprT::lit(3);
+        let b = VarExprT::var(String::from("x"));
+        let expected = Rc::new(Add(Rc::new(Lit(3)), Rc::new(Var(String::from("x")))));
+        assert_eq!(a.add(&b), expected);
+        let expected = Rc::new(Mul(Rc::new(Lit(3)), Rc::new(Var(String::from("x")))));
+        assert_eq!(a.mul(&b), expected);
+    }
+
 
     #[test]
     fn test_mul_lit_lit() {
