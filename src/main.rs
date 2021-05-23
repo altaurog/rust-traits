@@ -1,5 +1,6 @@
-use typeclasses::ExprT;
+use typeclasses::{ExprT, Expr};
 
 fn main() {
-    println!("val is {:?}", ExprT::Lit(2));
+    let lit2 = ExprT::lit(2);
+    println!("val is {:?}", lit2);
 }
